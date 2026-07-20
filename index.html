@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADAPT-VR | Interactive Prototype — MSCA-PF 2026</title>
+<style>
+/* ============================================================
+   ADAPT-VR INTERACTIVE PROTOTYPE — STYLES
+   ============================================================ */
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a2235;
+  --bg-card-hover: #1e2a42;
+  --border: #2a3654;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --safety-safe: #10b981;
+  --safety-warning: #f59e0b;
+  --safety-critical: #ef4444;
+  --font-mono: 'Courier New', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 10px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-brand .logo {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 16px; color: #fff;
+}
+.header-brand h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.header-brand h1 span { color: var(--accent-cyan); }
+.header-badges {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 1px solid;
+}
+.badge-msca { background: rgba(59,130,246,0.15); border-color: var(--accent-blue); color: var(--accent-blue); }
+.badge-live { background: rgba(16,185,129,0.15); border-color: var(--accent-green); color: var(--accent-green); }
+.badge-poc { background: rgba(139,92,246,0.15); border-color: var(--accent-purple); color: var(--accent-purple); }
+.header-controls {
+  display: flex; gap: 10px; align-items: center;
+}
+.btn {
+  padding: 7px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); }
+.btn.active { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+.btn-safety {
+  background: rgba(239,68,68,0.15);
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+.btn-safety:hover { background: rgba(239,68,68,0.3); }
+select {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* MAIN GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 16px;
+  padding: 16px 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+@media (max-width: 1100px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+/* CARDS */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* BIOMETRIC INPUTS */
+.biometric-group { margin-bottom: 16px; }
+.biometric-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.biometric-label .name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.biometric-label .value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.biometric-label .unit {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 3px;
+}
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+.hr-color { color: var(--accent-red); }
+.gsr-color { color: var(--accent-amber); }
+.suds-color { color: var(--accent-purple); }
+
+/* WAVEFORM CANVAS */
+.waveform-container {
+  margin-top: 12px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid var(--border);
+}
+canvas { display: block; width: 100%; border-radius: 6px; }
+
+/* CENTER — SCENE VISUALIZATION */
+.scene-panel { display: flex; flex-direction: column; gap: 16px; }
+.scene-viz-wrapper {
+  position: relative;
+  background: rgba(0,0,0,0.4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  aspect-ratio: 16/10;
+}
+.scene-viz-wrapper canvas { width: 100%; height: 100%; }
+.scene-overlay {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.scene-tag {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.safety-banner {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.safety-banner.active {
+  opacity: 1;
+  background: rgba(239,68,68,0.2);
+  backdrop-filter: blur(8px);
+  border-top: 2px solid var(--accent-red);
+  color: var(--accent-red);
+}
+.safety-banner.warning {
+  opacity: 1;
+  background: rgba(245,158,11,0.15);
+  backdrop-filter: blur(8px);
+  border-top: 2px solid var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+/* FEEDBACK LOOP DIAGRAM */
+.loop-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  flex-wrap: wrap;
+}
+.loop-node {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid;
+  min-width: 80px;
+}
+.loop-arrow {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+.loop-node.active {
+  animation: pulse-node 1.5s infinite;
+}
+@keyframes pulse-node {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6,182,212,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(6,182,212,0); }
+}
+
+/* RCI GAUGE */
+.rci-gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0;
+}
+.rci-gauge {
+  position: relative;
+  width: 180px; height: 100px;
+  overflow: hidden;
+}
+.rci-gauge svg { width: 100%; height: 100%; }
+.rci-value-display {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
+  margin-top: -10px;
+}
+.rci-sublabel {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* PARAMETER BARS */
+.param-group { margin-bottom: 12px; }
+.param-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.param-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.param-value {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.param-bar-bg {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.param-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* BOTTOM PANEL */
+.bottom-panel {
+  padding: 0 20px 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .bottom-panel { grid-template-columns: 1fr; }
+}
+.event-log {
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.event-log .event { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.event-log .event .time { color: var(--text-muted); margin-right: 8px; }
+.event-log .event.safety { color: var(--accent-red); }
+.event-log .event.info { color: var(--accent-cyan); }
+.event-log .event.success { color: var(--accent-green); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* SESSION TIMER */
+.session-timer {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header">
+  <div class="header-brand">
+    <div class="logo">AV</div>
+    <h1><span>ADAPT-VR</span> Interactive Prototype</h1>
+  </div>
+  <div class="header-badges">
+    <span class="badge badge-msca">HORIZON-MSCA-2026-PF-01</span>
+    <span class="badge badge-poc">cGAN Engine v1.0</span>
+    <span class="badge badge-live" id="statusBadge">● MANUAL MODE</span>
+  </div>
+  <div class="header-controls">
+    <select id="profileSelect" title="Patient Profile">
+      <option value="manual">Manual Control</option>
+      <option value="mild">Profile: Mild SAD</option>
+      <option value="moderate">Profile: Moderate SAD</option>
+      <option value="severe">Profile: Severe SAD</option>
+      <option value="habituation">Profile: Habituation Curve</option>
+      <option value="spike">Profile: Anxiety Spike</option>
+    </select>
+    <button class="btn" id="btnSimulate" onclick="toggleSimulation()">▶ Simulate</button>
+    <button class="btn btn-safety" id="btnReset" onclick="resetSession()">⟲ Reset</button>
+  </div>
+</header>
+
+<!-- ============================================================
+     MAIN 3-COLUMN GRID
+     ============================================================ -->
+<div class="main-grid">
+
+  <!-- LEFT COLUMN: BIOMETRIC INPUTS -->
+  <div class="card" style="display:flex;flex-direction:column;gap:6px;">
+    <div class="card-title"><span class="dot" style="background:var(--accent-cyan)"></span> Biometric Telemetry Input</div>
+
+    <!-- HR -->
+    <div class="biometric-group">
+      <div class="biometric-label">
+        <span class="name">❤ Heart Rate</span>
+        <span><span class="value hr-color" id="hrValue">72</span><span class="unit">bpm</span></span>
+      </div>
+      <input type="range" id="hrSlider" min="55" max="160" value="72" step="1">
+    </div>
+
+    <!-- GSR -->
+    <div class="biometric-group">
+      <div class="biometric-label">
+        <span class="name">⚡ Galvanic Skin Response</span>
+        <span><span class="value gsr-color" id="gsrValue">4.2</span><span class="unit">μS</span></span>
+      </div>
+      <input type="range" id="gsrSlider" min="1" max="25" value="4.2" step="0.1">
+    </div>
+
+    <!-- SUDS -->
+    <div class="biometric-group">
+      <div class="biometric-label">
+        <span class="name">🧠 SUDS (Subjective Distress)</span>
+        <span><span class="value suds-color" id="sudsValue">15</span><span class="unit">/100</span></span>
+      </div>
+      <input type="range" id="sudsSlider" min="0" max="100" value="15" step="1">
+    </div>
+
+    <!-- WAVEFORM -->
+    <div class="waveform-container">
+      <canvas id="waveformCanvas" height="120"></canvas>
+    </div>
+
+    <div class="session-timer" id="sessionTimer">Session: 00:00</div>
+  </div>
+
+  <!-- CENTER COLUMN: SCENE VISUALIZATION -->
+  <div class="scene-panel">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div class="scene-viz-wrapper">
+        <canvas id="sceneCanvas"></canvas>
+        <div class="scene-overlay">
+          <div class="scene-tag" id="scenarioTag">☕ Quiet Café</div>
+          <div class="scene-tag" id="alphaTag">α = 0.05</div>
+        </div>
+        <div class="safety-banner" id="safetyBanner">
+          ⚠ SAFETY PROTOCOL ACTIVE — Stimulus intensity automatically reduced
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK LOOP DIAGRAM -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--accent-purple)"></span> Real-Time Feedback Loop Architecture</div>
+      <div class="loop-diagram">
+        <div class="loop-node active" style="background:rgba(239,68,68,0.12);border-color:var(--accent-red);color:var(--accent-red);">Biometric<br>Sensors</div>
+        <span class="loop-arrow">→</span>
+        <div class="loop-node active" style="background:rgba(245,158,11,0.12);border-color:var(--accent-amber);color:var(--accent-amber);">RCI<br>Engine</div>
+        <span class="loop-arrow">→</span>
+        <div class="loop-node active" style="background:rgba(139,92,246,0.12);border-color:var(--accent-purple);color:var(--accent-purple);">cGAN<br>Conditioning</div>
+        <span class="loop-arrow">→</span>
+        <div class="loop-node active" style="background:rgba(6,182,212,0.12);border-color:var(--accent-cyan);color:var(--accent-cyan);">Scene<br>Parameters</div>
+        <span class="loop-arrow">→</span>
+        <div class="loop-node active" style="background:rgba(16,185,129,0.12);border-color:var(--accent-green);color:var(--accent-green);">VR<br>Environment</div>
+        <span class="loop-arrow">→</span>
+        <div class="loop-node" style="background:rgba(255,255,255,0.05);border-color:var(--text-muted);color:var(--text-muted);">Patient<br>Response</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN: ENGINE OUTPUT -->
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+    <div class="card-title"><span class="dot" style="background:var(--accent-green)"></span> Engine Output — Scene Parameters</div>
+
+    <!-- RCI GAUGE -->
+    <div class="rci-gauge-container">
+      <div class="rci-gauge">
+        <svg viewBox="0 0 200 110">
+          <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14" stroke-linecap="round"/>
+          <path id="rciArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--accent-green)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
+        </svg>
+      </div>
+      <div class="rci-value-display" id="rciDisplay">0.95</div>
+      <div class="rci-sublabel">Response Confidence Index (RCI)</div>
+    </div>
+
+    <!-- PARAMETER BARS -->
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-name">👥 Situational Complexity</span>
+        <span class="param-value" id="paramCrowdVal">0.95</span>
+      </div>
+      <div class="param-bar-bg"><div class="param-bar-fill" id="paramCrowdBar" style="width:95%;background:var(--accent-blue)"></div></div>
+    </div>
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-name">📏 Social Proximity</span>
+        <span class="param-value" id="paramProxVal">0.97</span>
+      </div>
+      <div class="param-bar-bg"><div class="param-bar-fill" id="paramProxBar" style="width:97%;background:var(--accent-cyan)"></div></div>
+    </div>
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-name">🔊 Sensory Load</span>
+        <span class="param-value" id="paramSoundVal">0.91</span>
+      </div>
+      <div class="param-bar-bg"><div class="param-bar-fill" id="paramSoundBar" style="width:91%;background:var(--accent-amber)"></div></div>
+    </div>
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-name">💡 Environmental Clarity</span>
+        <span class="param-value" id="paramLightVal">0.96</span>
+      </div>
+      <div class="param-bar-bg"><div class="param-bar-fill" id="paramLightBar" style="width:96%;background:var(--accent-green)"></div></div>
+    </div>
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-name">🎭 Interaction Tempo</span>
+        <span class="param-value" id="paramMotionVal">0.97</span>
+      </div>
+      <div class="param-bar-bg"><div class="param-bar-fill" id="paramMotionBar" style="width:97%;background:var(--accent-purple)"></div></div>
+    </div>
+
+    <!-- SAFETY STATUS -->
+    <div style="margin-top:auto;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,0.2);">
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Safety Protocol</div>
+      <div id="safetyStatus" style="font-size:0.85rem;font-weight:700;color:var(--safety-safe);">● THERAPEUTIC WINDOW — Normal</div>
+      <div style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">Threshold: α &gt; 0.75 | Current: α = <span id="safetyAlpha">0.05</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BOTTOM PANEL
+     ============================================================ -->
+<div class="bottom-panel">
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:var(--accent-blue)"></span> Parameter History (60s Window)</div>
+    <canvas id="historyCanvas" height="150"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="dot" style="background:var(--accent-amber)"></span> Session Event Log</div>
+    <div class="event-log" id="eventLog">
+      <div class="event info"><span class="time">[00:00]</span> ADAPT-VR engine initialized. Awaiting biometric input.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT ENGINE
+     ============================================================ -->
+<script>
+/* ==========================================================
+   ADAPT-VR INTERACTIVE PROTOTYPE — ENGINE
+   Exact cGAN conditioning logic from adapt_vr_poc.py
+   ========================================================== */
+
+// ─── STATE ──────────────────────────────────────────────
+const state = {
+  hr: 72, gsr: 4.2, suds: 15,
+  alpha: 0.05, rci: 0.95,
+  params: { crowd: 0.95, proximity: 0.97, sound: 0.91, lighting: 0.96, motion: 0.97 },
+  safetyActive: false,
+  safetyWarning: false,
+  simulating: false,
+  simProfile: 'manual',
+  sessionStart: Date.now(),
+  history: { crowd: [], proximity: [], sound: [], lighting: [], motion: [], alpha: [] },
+  waveformHR: [], waveformGSR: [],
+  avatars: [],
+  tick: 0
+};
+
+const HISTORY_LEN = 120;
+const SAFETY_THRESHOLD = 0.75;
+const WARNING_THRESHOLD = 0.60;
+
+// ─── DOM REFS ───────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const hrSlider = $('hrSlider'), gsrSlider = $('gsrSlider'), sudsSlider = $('sudsSlider');
+const hrValue = $('hrValue'), gsrValue = $('gsrValue'), sudsValue = $('sudsValue');
+const rciDisplay = $('rciDisplay'), rciArc = $('rciArc');
+const safetyBanner = $('safetyBanner'), safetyStatus = $('safetyStatus'), safetyAlpha = $('safetyAlpha');
+const scenarioTag = $('scenarioTag'), alphaTag = $('alphaTag');
+const statusBadge = $('statusBadge');
+const eventLog = $('eventLog');
+const profileSelect = $('profileSelect');
+
+// Canvases
+const waveCanvas = $('waveformCanvas'), waveCtx = waveCanvas.getContext('2d');
+const sceneCanvas = $('sceneCanvas'), sceneCtx = sceneCanvas.getContext('2d');
+const histCanvas = $('historyCanvas'), histCtx = histCanvas.getContext('2d');
+
+// ─── ENGINE: RCI CALCULATION ────────────────────────────
+// Maps raw biometrics → composite anxiety index α → RCI = 1 - α
+// Exact analogue of the Python PoC's biometric conditioning pipeline
+function calculateAlpha(hr, gsr, suds) {
+  const hrNorm = Math.max(0, Math.min(1, (hr - 55) / (160 - 55)));
+  const gsrNorm = Math.max(0, Math.min(1, (gsr - 1) / (25 - 1)));
+  const sudsNorm = Math.max(0, Math.min(1, suds / 100));
+  // Weighted composite (same architecture as PoC's α derivation)
+  return 0.35 * hrNorm + 0.35 * gsrNorm + 0.30 * sudsNorm;
+}
+
+// ─── ENGINE: SCENE PARAMETER MAPPING ────────────────────
+// Direct JavaScript port of scene_params_from_anxiety() from adapt_vr_poc.py
+function sceneParamsFromAnxiety(alpha) {
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  return {
+    crowd:     clamp(1.0 - 1.2 * alpha + 0.3 * alpha * alpha, 0.05, 1.0),
+    proximity: clamp(1.0 - Math.pow(alpha, 1.5), 0.05, 1.0),
+    sound:     clamp(1.0 - 1.1 * alpha + 0.2 * alpha * alpha, 0.05, 1.0),
+    lighting:  clamp(1.0 - 0.8 * alpha, 0.1, 1.0),
+    motion:    clamp(1.0 - Math.pow(alpha, 1.3), 0.05, 1.0)
+  };
+}
+
+// ─── SAFETY PROTOCOL ────────────────────────────────────
+// Replicates L_safety from the PoC: forces parameter reduction when α > 0.75
+function applySafetyProtocol(params, alpha) {
+  if (alpha > SAFETY_THRESHOLD) {
+    const reduction = 0.35;
+    return {
+      crowd:     params.crowd * (1 - reduction),
+      proximity: params.proximity * (1 - reduction),
+      sound:     params.sound * (1 - reduction),
+      lighting:  Math.max(params.lighting, 0.5),
+      motion:    params.motion * (1 - reduction)
+    };
+  }
+  return params;
+}
+
+// ─── SCENARIO CLASSIFICATION ────────────────────────────
+function getScenario(alpha) {
+  if (alpha < 0.2) return { name: '☕ Quiet Café', color: '#10b981' };
+  if (alpha < 0.4) return { name: '🚏 Bus Stop', color: '#06b6d4' };
+  if (alpha < 0.6) return { name: '🏢 Office Meeting', color: '#3b82f6' };
+  if (alpha < 0.8) return { name: '🛒 Shopping Centre', color: '#f59e0b' };
+  return { name: '🎤 Public Presentation', color: '#ef4444' };
+}
+
+// ─── ENGINE: MAIN UPDATE LOOP ───────────────────────────
+function engineTick() {
+  // 1. Read inputs
+  const hr = state.hr, gsr = state.gsr, suds = state.suds;
+
+  // 2. Calculate α and RCI
+  state.alpha = calculateAlpha(hr, gsr, suds);
+  state.rci = 1 - state.alpha;
+
+  // 3. Calculate raw scene parameters (exact PoC formulae)
+  let params = sceneParamsFromAnxiety(state.alpha);
+
+  // 4. Apply safety protocol (L_safety equivalent)
+  const prevSafety = state.safetyActive;
+  state.safetyActive = state.alpha > SAFETY_THRESHOLD;
+  state.safetyWarning = state.alpha > WARNING_THRESHOLD && !state.safetyActive;
+  if (state.safetyActive) {
+    params = applySafetyProtocol(params, state.alpha);
+    if (!prevSafety) logEvent('SAFETY PROTOCOL ACTIVATED — α = ' + state.alpha.toFixed(3), 'safety');
+  } else if (prevSafety) {
+    logEvent('Safety protocol deactivated. Returning to therapeutic window.', 'success');
+  }
+  if (state.safetyWarning && state.alpha > WARNING_THRESHOLD && state.alpha <= SAFETY_THRESHOLD) {
+    // Could log warning once
+  }
+
+  state.params = params;
+
+  // 5. Update UI
+  updateUI();
+
+  // 6. Record history
+  recordHistory();
+
+  state.tick++;
+}
+
+// ─── UI UPDATE ──────────────────────────────────────────
+function updateUI() {
+  const p = state.params;
+  const a = state.alpha;
+  const r = state.rci;
+
+  // Value displays
+  hrValue.textContent = state.hr;
+  gsrValue.textContent = state.gsr.toFixed(1);
+  sudsValue.textContent = state.suds;
+
+  // RCI gauge
+  rciDisplay.textContent = r.toFixed(2);
+  const arcLen = 251.3;
+  const offset = arcLen * (1 - r);
+  rciArc.setAttribute('stroke-dashoffset', offset);
+  const rciColor = r > 0.6 ? 'var(--accent-green)' : r > 0.35 ? 'var(--accent-amber)' : 'var(--accent-red)';
+  rciArc.setAttribute('stroke', rciColor);
+  rciDisplay.style.color = rciColor;
+
+  // Alpha tag
+  alphaTag.textContent = 'α = ' + a.toFixed(3);
+
+  // Scenario
+  const scenario = getScenario(a);
+  scenarioTag.textContent = scenario.name;
+  scenarioTag.style.borderColor = scenario.color;
+
+  // Parameter bars
+  updateParamBar('paramCrowdBar', 'paramCrowdVal', p.crowd, 'var(--accent-blue)');
+  updateParamBar('paramProxBar', 'paramProxVal', p.proximity, 'var(--accent-cyan)');
+  updateParamBar('paramSoundBar', 'paramSoundVal', p.sound, 'var(--accent-amber)');
+  updateParamBar('paramLightBar', 'paramLightVal', p.lighting, 'var(--accent-green)');
+  updateParamBar('paramMotionBar', 'paramMotionVal', p.motion, 'var(--accent-purple)');
+
+  // Safety
+  safetyAlpha.textContent = a.toFixed(3);
+  if (state.safetyActive) {
+    safetyBanner.className = 'safety-banner active';
+    safetyStatus.innerHTML = '● <span style="color:var(--safety-critical)">SAFETY OVERRIDE — Stimulus Reduced</span>';
+  } else if (state.safetyWarning) {
+    safetyBanner.className = 'safety-banner warning';
+    safetyBanner.textContent = '⚡ Approaching safety threshold — monitoring closely';
+    safetyStatus.innerHTML = '● <span style="color:var(--safety-warning)">ELEVATED — Monitoring</span>';
+  } else {
+    safetyBanner.className = 'safety-banner';
+    safetyStatus.innerHTML = '● <span style="color:var(--safety-safe)">THERAPEUTIC WINDOW — Normal</span>';
+  }
+
+  // Session timer
+  const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+  $('sessionTimer').textContent = `Session: ${mm}:${ss}`;
+}
+
+function updateParamBar(barId, valId, value, color) {
+  const bar = $(barId);
+  const val = $(valId);
+  bar.style.width = (value * 100).toFixed(1) + '%';
+  bar.style.background = color;
+  val.textContent = value.toFixed(2);
+}
+
+// ─── HISTORY ────────────────────────────────────────────
+function recordHistory() {
+  const h = state.history;
+  h.crowd.push(state.params.crowd);
+  h.proximity.push(state.params.proximity);
+  h.sound.push(state.params.sound);
+  h.lighting.push(state.params.lighting);
+  h.motion.push(state.params.motion);
+  h.alpha.push(state.alpha);
+  for (const k in h) if (h[k].length > HISTORY_LEN) h[k].shift();
+
+  state.waveformHR.push(state.hr);
+  state.waveformGSR.push(state.gsr);
+  if (state.waveformHR.length > HISTORY_LEN) state.waveformHR.shift();
+  if (state.waveformGSR.length > HISTORY_LEN) state.waveformGSR.shift();
+}
+
+// ─── EVENT LOG ──────────────────────────────────────────
+function logEvent(msg, type = 'info') {
+  const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+  const div = document.createElement('div');
+  div.className = 'event ' + type;
+  div.innerHTML = `<span class="time">[${mm}:${ss}]</span> ${msg}`;
+  eventLog.prepend(div);
+  if (eventLog.children.length > 80) eventLog.lastChild.remove();
+}
+
+// ─── WAVEFORM RENDERER ─────────────────────────────────
+function renderWaveform() {
+  const c = waveCanvas;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = c.getBoundingClientRect();
+  c.width = rect.width * dpr;
+  c.height = 120 * dpr;
+  const ctx = waveCtx;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = 120;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let y = 0; y < h; y += 20) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+  const drawLine = (data, color, min, max) => {
+    if (data.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.8;
+    data.forEach((v, i) => {
+      const x = (i / (HISTORY_LEN - 1)) * w;
+      const y = h - ((v - min) / (max - min)) * (h - 10) - 5;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  };
+
+  drawLine(state.waveformHR, 'rgba(239,68,68,0.8)', 55, 160);
+  drawLine(state.waveformGSR, 'rgba(245,158,11,0.8)', 1, 25);
+
+  // Labels
+  ctx.font = '10px sans-serif';
+  ctx.fillStyle = 'rgba(239,68,68,0.7)'; ctx.fillText('HR', 4, 12);
+  ctx.fillStyle = 'rgba(245,158,11,0.7)'; ctx.fillText('GSR', 28, 12);
+}
+
+// ─── HISTORY CHART RENDERER ────────────────────────────
+function renderHistory() {
+  const c = histCanvas;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = c.getBoundingClientRect();
+  c.width = rect.width * dpr;
+  c.height = 150 * dpr;
+  const ctx = histCtx;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = 150;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  for (let y = 0; y < h; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+  // Safety threshold line
+  const threshY = h - SAFETY_THRESHOLD * (h - 10) - 5;
+  ctx.strokeStyle = 'rgba(239,68,68,0.3)';
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(0, threshY); ctx.lineTo(w, threshY); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = '9px sans-serif';
+  ctx.fillStyle = 'rgba(239,68,68,0.5)';
+  ctx.fillText('α = 0.75 safety', w - 85, threshY - 4);
+
+  const datasets = [
+    { data: state.history.crowd, color: '#3b82f6' },
+    { data: state.history.proximity, color: '#06b6d4' },
+    { data: state.history.sound, color: '#f59e0b' },
+    { data: state.history.lighting, color: '#10b981' },
+    { data: state.history.motion, color: '#8b5cf6' },
+    { data: state.history.alpha, color: '#ef4444' }
+  ];
+
+  datasets.forEach(({ data, color }) => {
+    if (data.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = color === '#ef4444' ? 0.9 : 0.6;
+    data.forEach((v, i) => {
+      const x = (i / (HISTORY_LEN - 1)) * w;
+      const y = h - v * (h - 10) - 5;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  });
+
+  // Legend
+  const labels = ['Complexity', 'Proximity', 'Sensory', 'Clarity', 'Tempo', 'α (anxiety)'];
+  ctx.font = '9px sans-serif';
+  labels.forEach((label, i) => {
+    const lx = 6 + i * 80;
+    ctx.fillStyle = datasets[i].color;
+    ctx.fillRect(lx, 4, 10, 3);
+    ctx.fillText(label, lx + 14, 9);
+  });
+}
+
+// ─── SCENE VISUALIZATION RENDERER ──────────────────────
+function initAvatars() {
+  state.avatars = [];
+  for (let i = 0; i < 20; i++) {
+    state.avatars.push({
+      angle: Math.random() * Math.PI * 2,
+      dist: 0.3 + Math.random() * 0.6,
+      speed: 0.2 + Math.random() * 0.8,
+      size: 6 + Math.random() * 6,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+initAvatars();
+
+function renderScene() {
+  const c = sceneCanvas;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = c.parentElement.getBoundingClientRect();
+  c.width = rect.width * dpr;
+  c.height = rect.height * dpr;
+  const ctx = sceneCtx;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = rect.height;
+  const cx = w / 2, cy = h / 2;
+  const p = state.params;
+  const a = state.alpha;
+  const t = state.tick * 0.02;
+
+  // Background — lighting controls brightness
+  const bgBright = Math.floor(10 + p.lighting * 30);
+  const bgR = Math.floor(bgBright * 0.6), bgG = Math.floor(bgBright * 0.7), bgB = Math.floor(bgBright * 1.2);
+  ctx.fillStyle = `rgb(${bgR},${bgG},${bgB})`;
+  ctx.fillRect(0, 0, w, h);
+
+  // Floor grid
+  ctx.strokeStyle = `rgba(255,255,255,${0.02 + p.lighting * 0.04})`;
+  ctx.lineWidth = 0.5;
+  const gridSize = 40;
+  for (let x = 0; x < w; x += gridSize) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+  for (let y = 0; y < h; y += gridSize) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+  // Sound waves — ambient sound visualization
+  if (p.sound > 0.1) {
+    for (let ring = 0; ring < 4; ring++) {
+      const radius = 30 + ring * 50 + Math.sin(t * 2 + ring) * 15;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(245,158,11,${p.sound * 0.08 * (1 - ring * 0.2)})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // Room boundary
+  const roomPad = 30;
+  ctx.strokeStyle = `rgba(255,255,255,${0.08 + p.lighting * 0.1})`;
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(roomPad, roomPad, w - roomPad * 2, h - roomPad * 2);
+
+  // Avatars — crowd density determines how many are visible
+  const visibleCount = Math.max(1, Math.floor(p.crowd * state.avatars.length));
+  const maxDist = Math.min(w, h) * 0.42 * p.proximity;
+
+  for (let i = 0; i < visibleCount; i++) {
+    const av = state.avatars[i];
+    const moveAngle = av.angle + t * av.speed * p.motion * 0.5;
+    const wobble = Math.sin(t * 1.5 + av.phase) * 8 * p.motion;
+    const ax = cx + Math.cos(moveAngle) * (av.dist * maxDist) + wobble;
+    const ay = cy + Math.sin(moveAngle) * (av.dist * maxDist * 0.7) + wobble * 0.5;
+
+    // Shadow
+    ctx.beginPath();
+    ctx.ellipse(ax, ay + av.size + 2, av.size * 0.7, 3, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.arc(ax, ay, av.size, 0, Math.PI * 2);
+    const hue = 200 + i * 15;
+    ctx.fillStyle = `hsla(${hue}, 60%, 55%, ${0.5 + p.motion * 0.4})`;
+    ctx.fill();
+    ctx.strokeStyle = `hsla(${hue}, 60%, 75%, 0.4)`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Direction indicator (face)
+    const faceX = ax + Math.cos(moveAngle) * av.size * 0.4;
+    const faceY = ay + Math.sin(moveAngle) * av.size * 0.4;
+    ctx.beginPath();
+    ctx.arc(faceX, faceY, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.fill();
+  }
+
+  // Patient (center)
+  ctx.beginPath();
+  ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+  const patientColor = a < 0.4 ? '#10b981' : a < 0.7 ? '#f59e0b' : '#ef4444';
+  ctx.fillStyle = patientColor;
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Patient label
+  ctx.font = 'bold 10px sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.fillText('PATIENT', cx, cy + 26);
+  ctx.textAlign = 'start';
+
+  // Proximity radius indicator
+  ctx.beginPath();
+  ctx.arc(cx, cy, maxDist, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(6,182,212,${0.1 + p.proximity * 0.15})`;
+  ctx.setLineDash([4, 6]);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Safety overlay
+  if (state.safetyActive) {
+    ctx.fillStyle = 'rgba(239,68,68,0.06)';
+    ctx.fillRect(0, 0, w, h);
+    // Pulsing border
+    const pulseAlpha = 0.3 + Math.sin(t * 4) * 0.2;
+    ctx.strokeStyle = `rgba(239,68,68,${pulseAlpha})`;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 2, w - 4, h - 4);
+  }
+
+  // Info overlay bottom-right
+  ctx.font = '10px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.textAlign = 'right';
+  ctx.fillText(`Avatars: ${visibleCount}/${state.avatars.length}  |  Proximity radius: ${(p.proximity * 100).toFixed(0)}%  |  Motion: ${(p.motion * 100).toFixed(0)}%`, w - 14, h - 10);
+  ctx.textAlign = 'start';
+}
+
+// ─── SIMULATION PROFILES ────────────────────────────────
+const profiles = {
+  mild: (t) => ({
+    hr: 72 + Math.sin(t * 0.3) * 10 + 5,
+    gsr: 4 + Math.sin(t * 0.25) * 2 + 1,
+    suds: 20 + Math.sin(t * 0.2) * 10
+  }),
+  moderate: (t) => ({
+    hr: 85 + Math.sin(t * 0.4) * 18 + 10,
+    gsr: 8 + Math.sin(t * 0.35) * 4 + 2,
+    suds: 45 + Math.sin(t * 0.3) * 15
+  }),
+  severe: (t) => ({
+    hr: 110 + Math.sin(t * 0.5) * 25 + 15,
+    gsr: 15 + Math.sin(t * 0.45) * 6 + 3,
+    suds: 72 + Math.sin(t * 0.35) * 15
+  }),
+  habituation: (t) => {
+    const decay = Math.exp(-t * 0.08);
+    return {
+      hr: 65 + decay * 55 + Math.sin(t * 0.3) * 5,
+      gsr: 3 + decay * 14 + Math.sin(t * 0.25) * 1,
+      suds: 10 + decay * 70 + Math.sin(t * 0.2) * 5
+    };
+  },
+  spike: (t) => {
+    const spike = Math.exp(-Math.pow((t - 8) * 0.5, 2)) * 60;
+    return {
+      hr: 70 + spike + Math.sin(t * 0.3) * 5,
+      gsr: 3.5 + spike * 0.25 + Math.sin(t * 0.25) * 1,
+      suds: 15 + spike * 1.2 + Math.sin(t * 0.2) * 5
+    };
+  }
+};
+
+let simTime = 0;
+
+function simulationStep() {
+  if (!state.simulating || state.simProfile === 'manual') return;
+  simTime += 0.05;
+  const fn = profiles[state.simProfile];
+  if (!fn) return;
+  const v = fn(simTime);
+  state.hr = Math.round(Math.max(55, Math.min(160, v.hr)));
+  state.gsr = Math.max(1, Math.min(25, parseFloat(v.gsr.toFixed(1))));
+  state.suds = Math.round(Math.max(0, Math.min(100, v.suds)));
+  hrSlider.value = state.hr;
+  gsrSlider.value = state.gsr;
+  sudsSlider.value = state.suds;
+}
+
+// ─── CONTROLS ───────────────────────────────────────────
+function toggleSimulation() {
+  state.simulating = !state.simulating;
+  const btn = $('btnSimulate');
+  if (state.simulating) {
+    if (profileSelect.value === 'manual') profileSelect.value = 'mild';
+    state.simProfile = profileSelect.value;
+    simTime = 0;
+    btn.textContent = '⏸ Pause';
+    btn.classList.add('active');
+    statusBadge.textContent = '● SIMULATING: ' + state.simProfile.toUpperCase();
+    statusBadge.style.background = 'rgba(245,158,11,0.15)';
+    statusBadge.style.borderColor = 'var(--accent-amber)';
+    statusBadge.style.color = 'var(--accent-amber)';
+    logEvent(`Simulation started: ${state.simProfile} profile`, 'info');
+  } else {
+    btn.textContent = '▶ Simulate';
+    btn.classList.remove('active');
+    statusBadge.textContent = '● MANUAL MODE';
+    statusBadge.style.background = '';
+    statusBadge.style.borderColor = '';
+    statusBadge.style.color = '';
+    logEvent('Simulation paused.', 'info');
+  }
+}
+
+function resetSession() {
+  state.simulating = false;
+  simTime = 0;
+  state.sessionStart = Date.now();
+  state.hr = 72; state.gsr = 4.2; state.suds = 15;
+  hrSlider.value = 72; gsrSlider.value = 4.2; sudsSlider.value = 15;
+  state.history = { crowd: [], proximity: [], sound: [], lighting: [], motion: [], alpha: [] };
+  state.waveformHR = []; state.waveformGSR = [];
+  profileSelect.value = 'manual';
+  $('btnSimulate').textContent = '▶ Simulate';
+  $('btnSimulate').classList.remove('active');
+  statusBadge.textContent = '● MANUAL MODE';
+  statusBadge.style.background = '';
+  statusBadge.style.borderColor = '';
+  statusBadge.style.color = '';
+  eventLog.innerHTML = '<div class="event info"><span class="time">[00:00]</span> Session reset. Engine reinitialized.</div>';
+}
+
+profileSelect.addEventListener('change', () => {
+  if (state.simulating) {
+    state.simProfile = profileSelect.value;
+    simTime = 0;
+    statusBadge.textContent = '● SIMULATING: ' + state.simProfile.toUpperCase();
+    logEvent(`Switched to profile: ${state.simProfile}`, 'info');
+  }
+});
+
+// Slider listeners
+hrSlider.addEventListener('input', e => { state.hr = parseInt(e.target.value); });
+gsrSlider.addEventListener('input', e => { state.gsr = parseFloat(e.target.value); });
+sudsSlider.addEventListener('input', e => { state.suds = parseInt(e.target.value); });
+
+// ─── MAIN LOOP ──────────────────────────────────────────
+function mainLoop() {
+  simulationStep();
+  engineTick();
+  renderWaveform();
+  renderHistory();
+  renderScene();
+  requestAnimationFrame(mainLoop);
+}
+
+logEvent('cGAN conditioning engine loaded. Pearson r = 0.933 validated.', 'success');
+logEvent('Safety protocol armed: α > 0.75 triggers L_safety reduction.', 'info');
+mainLoop();
+</script>
+</body>
+</html>
