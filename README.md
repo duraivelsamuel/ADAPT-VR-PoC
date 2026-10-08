@@ -44,7 +44,7 @@ The mapping follows **graduated exposure therapy principles** (Craske et al., 20
 | Avatar Motion | 0.994 | 0.027 | 0.030 |
 | **Mean** | **0.933** | **0.033** | **0.029** |
 
-**Safety protocol:** Crowd density peaks at α = 0.72 (target: 0.65) — the system activates the safety mechanism conservatively early, consistent with therapeutic best practice.
+**Safety protocol:** Crowd density peaks at α = 0.72 (target: 0.65) — the trained model constrains the parameter before the hard safety loss threshold (α > 0.75), activating the safety mechanism conservatively early, consistent with therapeutic best practice.
 
 ---
 
@@ -116,6 +116,8 @@ L_G = L_adv + 10·L_recon + 8·L_safety
 L_safety = ReLU(P1 - 0.65) + ReLU(P3 - 0.70)   [applied when α > 0.75]
 ```
 
+Note: the safety loss activates at α > 0.75 (training constraint); the observed crowd density peak at α = 0.72 reflects the model learning to constrain outputs before the hard threshold is reached.
+
 ---
 
 ## Reproducibility
@@ -136,8 +138,8 @@ No external datasets required. Synthetic biometric data is generated from clinic
 This implementation is a proof-of-concept for the **ADAPT-VR** research programme, which will:
 
 - **WP1:** Co-design workshops with NHS clinicians and SAD service users to validate the therapeutic parameter mapping
-- **WP2:** Integrate the cGAN with a photorealistic VR rendering pipeline (Meta Quest 3, HoloLens 2, BCU HCI Research Centre)
-- **WP3:** Pilot randomised controlled trial (n=60, adaptive GAN-VRET vs. static-VRET, NHS ethics approved)
+- **WP2:** Integrate the cGAN with a photorealistic VR rendering pipeline (Meta Quest 2, BCU HCI Research Centre)
+- **WP3:** Mixed-methods clinical feasibility and usability study (n = 15–20 SAD-diagnosed participants, Months 13–22), collecting SUS, IPQ, SIAS, LSAS, biometric, and exit interview data; ethics approval targeted Month 15
 
 **Note:** This proof-of-concept uses synthetic biometric data. Clinical deployment requires ethics approval, real biometric validation, and photorealistic VR integration. This code is not a medical device.
 
